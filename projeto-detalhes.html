@@ -169,72 +169,6 @@
       font-size: 0.95rem;
     }
 
-    /* MODAL */
-    .modal-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.5);
-      z-index: 100;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .modal-overlay.open {
-      display: flex;
-    }
-
-    .modal {
-      background-color: white;
-      border-radius: 10px;
-      padding: 32px;
-      width: 100%;
-      max-width: 460px;
-    }
-
-    .modal h2 {
-      font-size: 1.2rem;
-      margin-bottom: 20px;
-    }
-
-    .form-group {
-      margin-bottom: 14px;
-    }
-
-    .form-group label {
-      display: block;
-      font-size: 0.82rem;
-      color: #777;
-      margin-bottom: 6px;
-    }
-
-    .form-group input,
-    .form-group textarea {
-      width: 100%;
-      padding: 10px 12px;
-      border: 1px solid #ddd;
-      border-radius: 6px;
-      font-size: 0.9rem;
-      outline: none;
-      font-family: Arial, sans-serif;
-    }
-
-    .form-group input:focus,
-    .form-group textarea:focus {
-      border-color: #6c63ff;
-    }
-
-    .form-group textarea {
-      resize: vertical;
-      min-height: 90px;
-    }
-
-    .modal-btns {
-      display: flex;
-      gap: 10px;
-      margin-top: 18px;
-    }
-
     .dev-avatar {
       width: 36px;
       height: 36px;
@@ -268,29 +202,6 @@
 
   <div class="detail-layout" id="page-content">
     <p style="color:#777">Carregando...</p>
-  </div>
-
-  <!-- MODAL -->
-  <div class="modal-overlay" id="modal">
-    <div class="modal">
-      <h2>Enviar proposta</h2>
-      <div class="form-group">
-        <label>Seu valor (R$)</label>
-        <input type="number" id="prop-value" placeholder="Ex: 2500" />
-      </div>
-      <div class="form-group">
-        <label>Prazo estimado</label>
-        <input type="text" id="prop-deadline" placeholder="Ex: 20 dias" />
-      </div>
-      <div class="form-group">
-        <label>Mensagem para o cliente</label>
-        <textarea id="prop-msg" placeholder="Descreva sua experiência..."></textarea>
-      </div>
-      <div class="modal-btns">
-        <button class="btn btn-purple" style="flex:1" onclick="submitProposal()">Enviar</button>
-        <button class="btn btn-outline" onclick="closeModal()">Cancelar</button>
-      </div>
-    </div>
   </div>
 
   <script src="js/main.js"></script>
@@ -378,8 +289,10 @@
           <p style="font-size:0.8rem; color:#f0a500; margin-top:4px">★★★★★ 5.0</p>
         </div>
 
+
+
         ${project.status === "open"
-          ? `<button class="btn btn-purple apply-btn" onclick="openModal()">Enviar proposta</button>`
+          ? `<button class="btn btn-purple apply-btn">Enviar proposta</button>`
           : `<button class="btn apply-btn" style="background:#eee; color:#999; cursor:not-allowed" disabled>Projeto encerrado</button>`
         }
 
@@ -387,21 +300,7 @@
       </div>
     `;
 
-    function openModal() { document.getElementById("modal").classList.add("open"); }
-    function closeModal() { document.getElementById("modal").classList.remove("open"); }
 
-    function submitProposal() {
-      const v = document.getElementById("prop-value").value;
-      const d = document.getElementById("prop-deadline").value;
-      const m = document.getElementById("prop-msg").value;
-      if (!v || !d || !m) { alert("Preencha todos os campos."); return; }
-      closeModal();
-      alert("✅ Proposta enviada com sucesso!");
-    }
-
-    document.getElementById("modal").addEventListener("click", function(e) {
-      if (e.target === this) closeModal();
-    });
   </script>
 
 </body>
