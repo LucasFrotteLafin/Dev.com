@@ -1,0 +1,25 @@
+{
+  "name": "dev.com",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "serve .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LucasFrotteLafin/Dev.com.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/LucasFrotteLafin/Dev.com/issues"
+  },
+  "homepage": "https://github.com/LucasFrotteLafin/Dev.com#readme",
+  "devDependencies": {
+    "serve": "^14.2.6"
+  }
+}
