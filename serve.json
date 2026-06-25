@@ -1,0 +1,16 @@
+{
+  "cleanUrls": false,
+  "rewrites": [
+    {
+      "source": "/projetos-app-build/**",
+      "destination": "/projetos-app-build/index.html"
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/",
+      "destination": "/index.html",
+      "type": 301
+    }
+  ]
+}

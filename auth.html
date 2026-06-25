@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dev.com — Entrar</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    body { display: flex; flex-direction: column; min-height: 100vh; }
+    .auth-wrap { flex: 1; display: flex; align-items: center; justify-content: center; padding: 40px 16px; }
+    .auth-box { background: white; border: 1px solid #ddd; border-radius: 10px; padding: 36px 32px; width: 100%; max-width: 460px; }
+    .auth-box h2 { font-size: 1.3rem; margin-bottom: 6px; }
+    .auth-box p.sub { font-size: 0.85rem; color: #777; margin-bottom: 24px; }
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; font-size: 0.82rem; font-weight: bold; margin-bottom: 6px; color: #555; }
+    .form-group input { width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.9rem; outline: none; }
+    .form-group input:focus { border-color: #6c63ff; }
+    .auth-btn { width: 100%; padding: 11px; font-size: 0.95rem; margin-top: 4px; }
+    .auth-tabs { display: flex; margin-bottom: 28px; border-bottom: 1px solid #ddd; }
+    .auth-tab { flex: 1; padding: 10px; background: none; border: none; cursor: pointer; font-size: 0.88rem; color: #777; border-bottom: 2px solid transparent; margin-bottom: -1px; }
+    .auth-tab.active { color: #6c63ff; border-bottom-color: #6c63ff; font-weight: bold; }
+    .auth-form { display: none; }
+    .auth-form.active { display: block; }
+    .error-msg { color: #c0392b; font-size: 0.82rem; margin-top: 10px; min-height: 18px; }
+    .success-msg { color: #2e7d52; font-size: 0.82rem; margin-top: 10px; min-height: 18px; }
+
+    /* Role selection */
+    .role-select { display: none; }
+    .role-select.active { display: block; }
+    .role-cards { display: flex; gap: 16px; margin-bottom: 8px; }
+    .role-card { flex: 1; border: 2px solid #ddd; border-radius: 10px; padding: 24px 16px; text-align: center; cursor: pointer; transition: border-color 0.15s, background 0.15s; }
+    .role-card:hover { border-color: #6c63ff; background: #faf9ff; }
+    .role-card.selected { border-color: #6c63ff; background: #ede9ff; }
+    .role-card .role-icon { font-size: 2rem; margin-bottom: 10px; }
+    .role-card h3 { font-size: 0.95rem; font-weight: bold; margin-bottom: 6px; color: #333; }
+    .role-card p { font-size: 0.78rem; color: #777; line-height: 1.5; }
+    .role-card.selected h3 { color: #6c63ff; }
+    .reg-form-fields { display: none; margin-top: 20px; }
+    .reg-form-fields.active { display: block; }
+    .role-badge { display: inline-flex; align-items: center; gap: 6px; background: #ede9ff; color: #6c63ff; font-size: 0.82rem; font-weight: bold; padding: 5px 12px; border-radius: 20px; margin-bottom: 16px; }
+    .change-role-btn { background: none; border: none; color: #6c63ff; font-size: 0.78rem; cursor: pointer; text-decoration: underline; margin-left: 8px; }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="logo">Dev.com</div>
+    <ul>
+      <li><a href="index.html">Início</a></li>
+    </ul>
+  </nav>
+
+  <div class="auth-wrap">
+    <div class="auth-box">
+      <div class="auth-tabs">
+        <button class="auth-tab active" onclick="switchTab('login')">Entrar</button>
+        <button class="auth-tab" onclick="switchTab('register')">Criar conta</button>
+        <button class="auth-tab" onclick="switchTab('recovery')">Recuperar senha</button>
+      </div>
+
+      <!-- LOGIN -->
+      <form class="auth-form active" id="form-login" onsubmit="doLogin(event)">
+        <h2>Bem-vindo de volta</h2>
+        <p class="sub">Entre com sua conta Dev.com</p>
+        <div class="form-group"><label>E-mail</label><input type="email" id="login-email" required /></div>
+        <div class="form-group"><label>Senha</label><input type="password" id="login-pass" required /></div>
+        <button class="btn btn-purple auth-btn" type="submit">Entrar</button>
+        <p class="error-msg" id="login-err"></p>
+      </form>
+
+      <!-- REGISTRO -->
+      <div class="auth-form" id="form-register">
+
+        <!-- Passo 1: escolha o tipo de conta -->
+        <div class="role-select active" id="role-select">
+          <h2>Criar conta</h2>
+          <p class="sub">Como você quer usar o Dev.com?</p>
+          <div class="role-cards">
+            <div class="role-card" id="card-client" onclick="selectRole('client')">
+              <div class="role-icon">🏢</div>
+              <h3>Sou empresa</h3>
+              <p>Quero publicar projetos e contratar desenvolvedores</p>
+            </div>
+            <div class="role-card" id="card-dev" onclick="selectRole('dev')">
+              <div class="role-icon">👨‍💻</div>
+              <h3>Sou desenvolvedor</h3>
+              <p>Quero encontrar projetos e enviar propostas</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Passo 2: formulário após escolha -->
+        <form class="reg-form-fields" id="reg-fields" onsubmit="doRegister(event)">
+          <div class="role-badge" id="role-badge"></div>
+          <div class="form-group"><label>Nome completo</label><input type="text" id="reg-name" required /></div>
+          <div class="form-group"><label>E-mail</label><input type="email" id="reg-email" required /></div>
+          <div class="form-group"><label>Senha</label><input type="password" id="reg-pass" minlength="6" required /></div>
+          <button class="btn btn-purple auth-btn" type="submit">Criar conta</button>
+          <p class="error-msg" id="reg-err"></p>
+        </form>
+
+      </div>
+
+      <!-- RECUPERAÇÃO -->
+      <form class="auth-form" id="form-recovery" onsubmit="doRecovery(event)">
+        <h2>Recuperar senha</h2>
+        <p class="sub">Digite seu e-mail e a nova senha desejada</p>
+        <div class="form-group"><label>E-mail cadastrado</label><input type="email" id="rec-email" required /></div>
+        <div class="form-group"><label>Nova senha</label><input type="password" id="rec-pass" minlength="6" required /></div>
+        <button class="btn btn-purple auth-btn" type="submit">Redefinir senha</button>
+        <p class="error-msg" id="rec-err"></p>
+        <p class="success-msg" id="rec-ok"></p>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/main.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    if (Auth.getSession()) window.location.href = "dashboard.html";
+
+    let selectedRole = null;
+
+    function switchTab(tab) {
+      document.querySelectorAll(".auth-tab").forEach((el, i) => {
+        el.classList.toggle("active", ["login", "register", "recovery"][i] === tab);
+      });
+      document.querySelectorAll(".auth-form").forEach(el => el.classList.remove("active"));
+      document.getElementById("form-" + tab).classList.add("active");
+    }
+
+    function selectRole(role) {
+      selectedRole = role;
+      document.getElementById("card-client").classList.toggle("selected", role === "client");
+      document.getElementById("card-dev").classList.toggle("selected", role === "dev");
+
+      document.getElementById("role-select").classList.remove("active");
+      document.getElementById("reg-fields").classList.add("active");
+
+      const label = role === "client" ? "🏢 Empresa" : "👨‍💻 Desenvolvedor";
+      document.getElementById("role-badge").innerHTML =
+        label + `<button class="change-role-btn" type="button" onclick="changeRole()">Trocar</button>`;
+    }
+
+    function changeRole() {
+      selectedRole = null;
+      document.getElementById("role-select").classList.add("active");
+      document.getElementById("reg-fields").classList.remove("active");
+      document.getElementById("card-client").classList.remove("selected");
+      document.getElementById("card-dev").classList.remove("selected");
+      document.getElementById("reg-err").textContent = "";
+    }
+
+    function doLogin(e) {
+      e.preventDefault();
+      const res = Auth.login({ email: document.getElementById("login-email").value, password: document.getElementById("login-pass").value });
+      if (!res.ok) { document.getElementById("login-err").textContent = res.msg; return; }
+      window.location.href = "dashboard.html";
+    }
+
+    function doRegister(e) {
+      e.preventDefault();
+      if (!selectedRole) return;
+      const res = Auth.register({
+        name: document.getElementById("reg-name").value,
+        email: document.getElementById("reg-email").value,
+        password: document.getElementById("reg-pass").value,
+        role: selectedRole,
+      });
+      if (!res.ok) { document.getElementById("reg-err").textContent = res.msg; return; }
+      window.location.href = "dashboard.html";
+    }
+
+    function doRecovery(e) {
+      e.preventDefault();
+      const res = Auth.resetPassword({ email: document.getElementById("rec-email").value, newPassword: document.getElementById("rec-pass").value });
+      if (!res.ok) { document.getElementById("rec-err").textContent = res.msg; document.getElementById("rec-ok").textContent = ""; return; }
+      document.getElementById("rec-err").textContent = "";
+      document.getElementById("rec-ok").textContent = "Senha redefinida! Você já pode fazer login.";
+    }
+  </script>
+</body>
+</html>

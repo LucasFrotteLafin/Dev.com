@@ -1,0 +1,24 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: Arial, sans-serif; background-color: #f4f4f4; color: #333; }
+a { text-decoration: none; color: inherit; }
+
+nav { background-color: #6c63ff; padding: 16px 32px; display: flex; justify-content: space-between; align-items: center; }
+.logo { color: white; font-size: 1.4rem; font-weight: bold; cursor: pointer; }
+nav ul { list-style: none; display: flex; gap: 24px; }
+nav ul a { color: white; font-size: 0.95rem; }
+nav ul a:hover { text-decoration: underline; }
+.nav-btn { background-color: white; color: #6c63ff; border: none; padding: 8px 18px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 0.9rem; }
+.nav-btn:hover { background-color: #ede9ff; }
+
+.btn { padding: 10px 22px; border-radius: 6px; border: none; cursor: pointer; font-size: 0.9rem; font-weight: bold; }
+.btn-purple { background-color: #6c63ff; color: white; }
+.btn-purple:hover { background-color: #574fd6; }
+.btn-outline { background-color: transparent; border: 2px solid #6c63ff; color: #6c63ff; }
+.btn-outline:hover { background-color: #6c63ff; color: white; }
+
+.badge { padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; }
+.badge-green { background-color: #d4f4e2; color: #2e7d52; }
+.badge-yellow { background-color: #fff4d4; color: #996600; }
+.badge-purple { background-color: #ede9ff; color: #6c63ff; }
+
+.tag { background-color: #ede9ff; color: #6c63ff; padding: 3px 10px; border-radius: 4px; font-size: 0.78rem; }
