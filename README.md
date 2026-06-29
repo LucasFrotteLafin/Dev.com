@@ -1,5 +1,11 @@
 # Dev.com
 
+# Alunos
+- Lucas Frotte Lafin - 06010493
+- Ana Luiza Maciel Mattos - 06009322
+- Pedro Nogueira Teodosio - 06010196
+- Alexandre dos Santos - 06010479
+
 Plataforma que conecta empresas a desenvolvedores freelancers. Empresas publicam projetos, devs enviam propostas e acompanham o andamento pelo dashboard.
 
 ## Tecnologias
