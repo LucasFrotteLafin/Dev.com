@@ -1,4 +1,4 @@
-# Dev.com 🚀
+# Dev.com
 
 Plataforma moderna que conecta empresas a desenvolvedores freelancers qualificados. Empresas publicam projetos com transparência de orçamento e prazo, desenvolvedores enviam propostas competitivas e acompanham tudo em tempo real através de dashboards intuitivos com notificações instantâneas.
 
