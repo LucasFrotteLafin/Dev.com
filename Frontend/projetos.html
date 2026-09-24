@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dev.com — Projetos</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .page-header { padding: 32px; background: white; border-bottom: 1px solid #ddd; text-align: center; }
+    .page-header h1 { font-size: 1.5rem; margin-bottom: 4px; }
+    .page-header p  { color: #777; font-size: .9rem; }
+    .search-bar { padding: 24px 32px; background: #f4f4f4; border-bottom: 1px solid #ddd; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .search-bar input  { padding: 10px 14px; border: 1px solid #ddd; border-radius: 6px; font-size: .9rem; outline: none; width: 320px; }
+    .search-bar select { padding: 10px 14px; border: 1px solid #ddd; border-radius: 6px; font-size: .9rem; outline: none; background: white; }
+    .search-bar input:focus, .search-bar select:focus { border-color: #6c63ff; }
+    .projects-list { padding: 24px 32px; max-width: 860px; margin: 0 auto; }
+    .results-count { font-size: .85rem; color: #777; margin-bottom: 16px; }
+    .project-card { background: white; border: 1px solid #ddd; border-radius: 8px; padding: 20px 24px; margin-bottom: 16px; cursor: pointer; }
+    .project-card:hover { border-color: #6c63ff; }
+    .project-card h3 { font-size: 1rem; margin-bottom: 6px; }
+    .project-card p  { font-size: .85rem; color: #777; line-height: 1.5; margin-bottom: 12px; }
+    .card-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; }
+    .budget   { font-weight: bold; color: #2e7d52; }
+    .card-meta { font-size: .78rem; color: #999; display: flex; gap: 14px; }
+    .tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+    .no-results { text-align: center; color: #999; padding: 60px 0; }
+    .pagination { display: flex; gap: 8px; justify-content: center; margin-top: 24px; }
+    .pagination button { padding: 8px 16px; border: 1px solid #ddd; border-radius: 6px; background: white; cursor: pointer; font-size: .85rem; }
+    .pagination button.active { background: #6c63ff; color: white; border-color: #6c63ff; }
+    .pagination button:disabled { opacity: .4; cursor: default; }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="logo">Dev.com</div>
+    <ul>
+      <li><a href="index.html">Início</a></li>
+      <li><a href="dashboard.html">Dashboard</a></li>
+    </ul>
+    <button class="nav-btn" id="nav-user-btn"></button>
+  </nav>
+
+  <div class="page-header">
+    <h1>Projetos disponíveis</h1>
+    <p>Encontre projetos em aberto que combinam com suas habilidades</p>
+  </div>
+
+  <div class="search-bar">
+    <input  type="text" id="search"   placeholder="Buscar projetos..." />
+    <select id="category">
+      <option value="">Todas as categorias</option>
+      <option>E-commerce</option><option>Web App</option><option>Landing Page</option>
+      <option>Dashboard</option><option>Sistema</option><option>Integração</option>
+      <option>Mobile</option><option>Outro</option>
+    </select>
+  </div>
+
+  <div class="projects-list">
+    <p class="results-count" id="results-count"></p>
+    <div id="list"><p style="color:#999;text-align:center">Carregando...</p></div>
+    <div class="pagination" id="pagination"></div>
+  </div>
+
+  <script src="js/main.js"></script>
+  <script>
+    renderNav();
+
+    let currentPage = 1;
+    let searchTimer = null;
+
+    document.getElementById("search").addEventListener("input", () => {
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(() => { currentPage = 1; loadProjects(); }, 400);
+    });
+    document.getElementById("category").addEventListener("change", () => { currentPage = 1; loadProjects(); });
+
+    async function loadProjects() {
+      const search   = document.getElementById("search").value.trim();
+      const category = document.getElementById("category").value;
+
+      let url = `/api/projects?status=Open&page=${currentPage}&pageSize=10`;
+      if (search)   url += `&search=${encodeURIComponent(search)}`;
+      if (category) url += `&category=${encodeURIComponent(category)}`;
+
+      document.getElementById("list").innerHTML = `<p style="color:#999;text-align:center">Carregando...</p>`;
+
+      try {
+        const data = await api(url);
+        const { items, totalCount, totalPages, page } = data;
+
+        document.getElementById("results-count").textContent = `${totalCount} projeto(s) em aberto`;
+
+        if (!items.length) {
+          document.getElementById("list").innerHTML = `<div class="no-results">🔍 Nenhum projeto encontrado.</div>`;
+          document.getElementById("pagination").innerHTML = "";
+          return;
+        }
+
+        document.getElementById("list").innerHTML = items.map(p => `
+          <div class="project-card" onclick="goTo('projeto-detalhes.html', ${p.id})">
+            <span class="badge badge-green">Aberto</span>
+            <h3 style="margin-top:8px">${p.title}</h3>
+            <p>${p.description}</p>
+            <div class="tags">${(p.tags ?? []).map(t => `<span class="tag">${t}</span>`).join("")}</div>
+            <div class="card-footer">
+              <span class="budget">${formatBudget(p.budget)}</span>
+              <div class="card-meta">
+                <span>⏱ ${p.deadline}</span>
+                <span>📨 ${p.proposalCount} propostas</span>
+                <span>👤 ${p.ownerName}</span>
+              </div>
+            </div>
+          </div>`).join("");
+
+        // Paginação
+        const pag = document.getElementById("pagination");
+        pag.innerHTML = "";
+        const prev = document.createElement("button");
+        prev.textContent = "← Anterior"; prev.disabled = page <= 1;
+        prev.onclick = () => { currentPage--; loadProjects(); };
+        pag.appendChild(prev);
+
+        const info = document.createElement("button");
+        info.textContent = `${page} / ${totalPages}`; info.classList.add("active"); info.disabled = true;
+        pag.appendChild(info);
+
+        const next = document.createElement("button");
+        next.textContent = "Próxima →"; next.disabled = page >= totalPages;
+        next.onclick = () => { currentPage++; loadProjects(); };
+        pag.appendChild(next);
+
+      } catch {
+        document.getElementById("list").innerHTML = `<div class="no-results">Erro ao carregar projetos. Verifique se a API está rodando.</div>`;
+      }
+    }
+
+    loadProjects();
+  </script>
+</body>
+</html>

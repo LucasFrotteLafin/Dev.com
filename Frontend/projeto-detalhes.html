@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dev.com — Detalhes do Projeto</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .back-bar { padding: 16px 32px; background: white; border-bottom: 1px solid #ddd; }
+    .back-bar button { background: none; border: none; color: #6c63ff; cursor: pointer; font-size: .9rem; }
+    .back-bar button:hover { text-decoration: underline; }
+    .detail-layout { display: flex; gap: 32px; padding: 32px; align-items: flex-start; }
+    .detail-main { flex: 1; }
+    .detail-main h1 { font-size: 1.5rem; margin: 12px 0 8px; }
+    .detail-meta { display: flex; gap: 20px; font-size: .85rem; color: #777; margin-bottom: 24px; flex-wrap: wrap; }
+    .detail-section { background: white; border: 1px solid #ddd; border-radius: 8px; padding: 24px; margin-bottom: 20px; }
+    .detail-section h2 { font-size: 1rem; font-weight: bold; margin-bottom: 12px; }
+    .detail-section p  { font-size: .88rem; color: #555; line-height: 1.7; }
+    .tags { display: flex; gap: 6px; flex-wrap: wrap; }
+    .proposal-item { display: flex; gap: 14px; padding: 16px 0; border-bottom: 1px solid #eee; align-items: flex-start; }
+    .proposal-item:last-child { border-bottom: none; }
+    .proposal-info { flex: 1; }
+    .proposal-info h4 { font-size: .9rem; margin-bottom: 4px; }
+    .proposal-info p  { font-size: .82rem; color: #777; line-height: 1.5; margin-bottom: 6px; }
+    .proposal-right { text-align: right; flex-shrink: 0; }
+    .proposal-right strong { display: block; color: #2e7d52; font-size: .95rem; }
+    .proposal-right span  { font-size: .78rem; color: #999; }
+    .detail-sidebar { width: 280px; flex-shrink: 0; }
+    .sidebar-box { background: white; border: 1px solid #ddd; border-radius: 8px; padding: 20px; margin-bottom: 16px; }
+    .sidebar-box h3 { font-size: .8rem; font-weight: bold; color: #999; text-transform: uppercase; margin-bottom: 14px; }
+    .info-line { display: flex; justify-content: space-between; font-size: .88rem; padding: 8px 0; border-bottom: 1px solid #eee; }
+    .info-line:last-child { border-bottom: none; }
+    .info-line span:first-child { color: #777; }
+    .info-line span:last-child  { font-weight: bold; }
+    .apply-btn { width: 100%; padding: 12px; font-size: .95rem; }
+    .dev-avatar { width: 36px; height: 36px; background: #6c63ff; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: .78rem; flex-shrink: 0; cursor: pointer; }
+    .dev-avatar:hover { background: #574fd6; }
+    .accept-btn { background: #2e7d52; color: white; border: none; padding: 6px 14px; border-radius: 6px; font-size: .8rem; cursor: pointer; }
+    .accept-btn:hover { background: #1e5c3a; }
+    .badge-accepted { background: #d4f4e2; color: #2e7d52; padding: 3px 10px; border-radius: 20px; font-size: .75rem; font-weight: bold; }
+    .dev-name-link { color: #6c63ff; cursor: pointer; text-decoration: underline; background: none; border: none; font-size: .9rem; font-weight: bold; padding: 0; }
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.4); z-index: 100; align-items: center; justify-content: center; }
+    .modal-overlay.open { display: flex; }
+    .modal { background: white; border-radius: 10px; padding: 32px; width: 100%; max-width: 480px; }
+    .modal h2 { font-size: 1.1rem; margin-bottom: 6px; }
+    .modal p.sub { font-size: .82rem; color: #777; margin-bottom: 20px; }
+    .form-group { margin-bottom: 14px; }
+    .form-group label { display: block; font-size: .82rem; font-weight: bold; margin-bottom: 5px; color: #555; }
+    .form-group input, .form-group textarea { width: 100%; padding: 9px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: .9rem; outline: none; font-family: inherit; box-sizing: border-box; }
+    .form-group input:focus, .form-group textarea:focus { border-color: #6c63ff; }
+    .form-group textarea { resize: vertical; min-height: 80px; }
+    .modal-actions { display: flex; gap: 10px; margin-top: 4px; }
+    .error-msg { color: #c0392b; font-size: .82rem; margin-top: 8px; min-height: 16px; }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="logo">Dev.com</div>
+    <ul>
+      <li><a href="index.html">Início</a></li>
+      <li><a href="dashboard.html">Dashboard</a></li>
+    </ul>
+    <button class="nav-btn" id="nav-user-btn"></button>
+  </nav>
+
+  <div class="back-bar">
+    <button onclick="history.back()">← Voltar para projetos</button>
+  </div>
+
+  <!-- Modal de proposta -->
+  <div class="modal-overlay" id="modal-proposta">
+    <div class="modal">
+      <h2>Enviar proposta</h2>
+      <p class="sub" id="modal-project-title"></p>
+      <form onsubmit="submitProposal(event)">
+        <div class="form-group"><label>Seu valor (R$)</label><input type="text" id="prop-value" placeholder="Ex: R$ 2.500" required /></div>
+        <div class="form-group"><label>Prazo estimado</label><input type="text" id="prop-deadline" placeholder="Ex: 20 dias" required /></div>
+        <div class="form-group">
+          <label>Mensagem para o cliente</label>
+          <textarea id="prop-message" placeholder="Explique sua experiência e por que você é o ideal para este projeto..." required minlength="20"></textarea>
+        </div>
+        <p class="error-msg" id="prop-err"></p>
+        <div class="modal-actions">
+          <button class="btn btn-purple" type="submit" id="btn-proposta" style="flex:1">Enviar proposta</button>
+          <button class="btn btn-outline" type="button" onclick="closeModal()">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="detail-layout" id="page-content">
+    <p style="color:#777">Carregando...</p>
+  </div>
+
+  <script src="js/main.js"></script>
+  <script>
+    renderNav();
+
+    const user = Session.getUser();
+    const projectId = parseInt(new URLSearchParams(window.location.search).get("id"));
+    let project = null;
+    let proposals = [];
+
+    if (!projectId) {
+      document.getElementById("page-content").innerHTML = `<p style="padding:32px;color:#999">Projeto não encontrado.</p>`;
+    } else {
+      loadPage();
+    }
+
+    async function loadPage() {
+      try {
+        project = await api(`/api/projects/${projectId}`);
+        document.title = "Dev.com — " + project.title;
+
+        const isOwner = user && user.id === project.ownerId;
+        const isDev   = user && user.role === "Dev";
+        const token   = Session.getToken();
+
+        // Busca propostas se owner ou dev logado
+        if (token && (isOwner || isDev)) {
+          try {
+            proposals = await api(`/api/projects/${projectId}/proposals`, { auth: true });
+          } catch { proposals = []; }
+        }
+
+        renderPage(isOwner, isDev);
+      } catch {
+        document.getElementById("page-content").innerHTML =
+          `<p style="padding:32px;color:#999">Projeto não encontrado.</p>`;
+      }
+    }
+
+    function renderPage(isOwner, isDev) {
+      const myProposal  = isDev ? proposals.find(p => p.devId === user?.id) : null;
+      const alreadySent = !!myProposal;
+
+      document.getElementById("page-content").innerHTML = `
+        <div class="detail-main">
+          <div>
+            <span class="badge ${getStatusBadge(project.status)}">${getStatusLabel(project.status)}</span>
+            <span class="tag" style="margin-left:8px">${project.category}</span>
+          </div>
+          <h1>${project.title}</h1>
+          <div class="detail-meta">
+            <span>👤 ${project.ownerName}</span>
+            <span>🕐 Publicado em ${formatDate(project.createdAt)}</span>
+            <span>📨 ${project.proposalCount} proposta(s)</span>
+          </div>
+
+          <div class="detail-section">
+            <h2>Descrição</h2>
+            <p>${project.description}</p>
+          </div>
+
+          <div class="detail-section">
+            <h2>Tecnologias desejadas</h2>
+            <div class="tags">${(project.tags ?? []).map(t => `<span class="tag">${t}</span>`).join("")}</div>
+          </div>
+
+          ${(isOwner || (isDev && alreadySent)) && proposals.length > 0 ? `
+          <div class="detail-section">
+            <h2>Propostas recebidas (${proposals.length})</h2>
+            ${proposals.map(p => `
+              <div class="proposal-item">
+                <div class="dev-avatar" onclick="goTo('dev-perfil.html?dev=${encodeURIComponent(p.devEmail)}')" title="Ver perfil">
+                  ${p.devName.split(" ").map(w=>w[0]).slice(0,2).join("").toUpperCase()}
+                </div>
+                <div class="proposal-info">
+                  <h4>
+                    ${isOwner
+                      ? `<button class="dev-name-link" onclick="goTo('dev-perfil.html?dev=${encodeURIComponent(p.devEmail)}')">${p.devName}</button>`
+                      : `<span style="font-size:.9rem;font-weight:bold">${p.devName}</span>`}
+                    ${p.status === "Accepted" ? `<span class="badge-accepted" style="margin-left:8px">✓ Aceita</span>` : ""}
+                    ${p.status === "Rejected" ? `<span style="font-size:.75rem;color:#999;margin-left:8px">Recusada</span>` : ""}
+                  </h4>
+                  <p>${p.message}</p>
+                  ${isOwner && project.status === "Open" && p.status === "Pending"
+                    ? `<button class="accept-btn" onclick="doAccept(${p.id})">✓ Aceitar proposta</button>`
+                    : ""}
+                </div>
+                <div class="proposal-right">
+                  <strong>${p.value}</strong>
+                  <span>⏱ ${p.deadline}</span>
+                  <span style="display:block;margin-top:2px">${formatDate(p.createdAt)}</span>
+                </div>
+              </div>`).join("")}
+          </div>` : ""}
+        </div>
+
+        <div class="detail-sidebar">
+          <div class="sidebar-box">
+            <h3>Informações</h3>
+            <div class="info-line"><span>Orçamento</span><span style="color:#2e7d52">${formatBudget(project.budget)}</span></div>
+            <div class="info-line"><span>Prazo</span><span>${project.deadline}</span></div>
+            <div class="info-line"><span>Categoria</span><span>${project.category}</span></div>
+            <div class="info-line"><span>Propostas</span><span>${project.proposalCount}</span></div>
+            ${project.acceptedAt ? `<div class="info-line"><span>Aceito em</span><span>${formatDate(project.acceptedAt)}</span></div>` : ""}
+          </div>
+
+          <div class="sidebar-box">
+            <h3>Cliente</h3>
+            <p style="font-size:.9rem;font-weight:bold">${project.ownerName}</p>
+          </div>
+
+          ${!user
+            ? `<button class="btn btn-purple apply-btn" onclick="goTo('auth.html')">Entrar para enviar proposta</button>`
+            : isOwner
+              ? `<button class="btn apply-btn" style="background:#eee;color:#999;cursor:not-allowed" disabled>Seu projeto</button>`
+              : user.role === "Client"
+                ? `<button class="btn apply-btn" style="background:#eee;color:#999;cursor:not-allowed" disabled>Apenas devs enviam propostas</button>`
+                : project.status !== "Open"
+                  ? `<button class="btn apply-btn" style="background:#eee;color:#999;cursor:not-allowed" disabled>Projeto encerrado</button>`
+                  : alreadySent
+                    ? `<button class="btn apply-btn" style="background:#eee;color:#999;cursor:not-allowed" disabled>Proposta já enviada</button>`
+                    : `<button class="btn btn-purple apply-btn" onclick="openModal()">Enviar proposta</button>`}
+
+          <button class="btn btn-outline apply-btn" style="margin-top:10px" onclick="goTo('projetos.html')">Ver mais projetos</button>
+        </div>`;
+    }
+
+    function openModal() {
+      document.getElementById("modal-project-title").textContent = project.title;
+      document.getElementById("prop-err").textContent = "";
+      document.getElementById("modal-proposta").classList.add("open");
+    }
+    function closeModal() { document.getElementById("modal-proposta").classList.remove("open"); }
+
+    async function submitProposal(e) {
+      e.preventDefault();
+      const btn = document.getElementById("btn-proposta");
+      btn.disabled = true; btn.textContent = "Enviando...";
+      try {
+        await api(`/api/projects/${projectId}/proposals`, {
+          method: "POST", auth: true,
+          body: {
+            value:    document.getElementById("prop-value").value,
+            deadline: document.getElementById("prop-deadline").value,
+            message:  document.getElementById("prop-message").value,
+          },
+        });
+        closeModal();
+        await loadPage();
+      } catch (err) {
+        document.getElementById("prop-err").textContent = err.message;
+        btn.disabled = false; btn.textContent = "Enviar proposta";
+      }
+    }
+
+    async function doAccept(proposalId) {
+      if (!confirm("Aceitar esta proposta?")) return;
+      try {
+        await api(`/api/proposals/${proposalId}/accept`, { method: "PATCH", auth: true });
+        await loadPage();
+      } catch (err) {
+        alert(err.message);
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+namespace DevCom.Application.Interfaces;
+
+/// <summary>
+/// Abstração sobre o Redis — mantém o domínio desacoplado da infraestrutura de cache.
+/// </summary>
+public interface ICacheService
+{
+    Task<T?> GetAsync<T>(string key, CancellationToken ct = default) where T : class;
+    Task SetAsync<T>(string key, T value, TimeSpan? expiry = null, CancellationToken ct = default) where T : class;
+    Task RemoveAsync(string key, CancellationToken ct = default);
+    Task RemoveByPrefixAsync(string prefix, CancellationToken ct = default);
+}

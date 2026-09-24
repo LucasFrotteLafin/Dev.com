@@ -1,0 +1,12 @@
+C:\Users\Lucas\OneDrive\Documentos\development\Dev.com\Dev.com\Backend\DevCom.Domain\bin\Release\net8.0\DevCom.Domain.deps.json
+C:\Users\Lucas\OneDrive\Documentos\development\Dev.com\Dev.com\Backend\DevCom.Domain\bin\Release\net8.0\DevCom.Domain.dll
+C:\Users\Lucas\OneDrive\Documentos\development\Dev.com\Dev.com\Backend\DevCom.Domain\bin\Release\net8.0\DevCom.Domain.pdb
+C:\Users\Lucas\OneDrive\Documentos\development\Dev.com\Dev.com\Backend\DevCom.Domain\obj\Release\net8.0\DevCom.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Lucas\OneDrive\Documentos\development\Dev.com\Dev.com\Backend\DevCom.Domain\obj\Release\net8.0\DevCom.Domain.AssemblyInfoInputs.cache
+C:\Users\Lucas\OneDrive\Documentos\development\Dev.com\Dev.com\Backend\DevCom.Domain\obj\Release\net8.0\DevCom.Domain.AssemblyInfo.cs
+C:\Users\Lucas\OneDrive\Documentos\development\Dev.com\Dev.com\Backend\DevCom.Domain\obj\Release\net8.0\DevCom.Domain.csproj.CoreCompileInputs.cache
+C:\Users\Lucas\OneDrive\Documentos\development\Dev.com\Dev.com\Backend\DevCom.Domain\obj\Release\net8.0\DevCom.Domain.sourcelink.json
+C:\Users\Lucas\OneDrive\Documentos\development\Dev.com\Dev.com\Backend\DevCom.Domain\obj\Release\net8.0\DevCom.Domain.dll
+C:\Users\Lucas\OneDrive\Documentos\development\Dev.com\Dev.com\Backend\DevCom.Domain\obj\Release\net8.0\refint\DevCom.Domain.dll
+C:\Users\Lucas\OneDrive\Documentos\development\Dev.com\Dev.com\Backend\DevCom.Domain\obj\Release\net8.0\DevCom.Domain.pdb
+C:\Users\Lucas\OneDrive\Documentos\development\Dev.com\Dev.com\Backend\DevCom.Domain\obj\Release\net8.0\ref\DevCom.Domain.dll

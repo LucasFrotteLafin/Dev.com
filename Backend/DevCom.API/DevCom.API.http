@@ -1,0 +1,6 @@
+@DevCom.API_HostAddress = http://localhost:5023
+
+GET {{DevCom.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

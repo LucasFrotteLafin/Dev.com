@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "Gc4glxRaeEY=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Lucas\\OneDrive\\Documentos\\development\\Dev.com\\Dev.com\\Backend\\DevCom.Application\\DevCom.Application.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Lucas\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\8.0.2\\microsoft.extensions.dependencyinjection.abstractions.8.0.2.nupkg.sha512"
+  ],
+  "logs": []
+}

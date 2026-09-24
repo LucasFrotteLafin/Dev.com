@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="DevCom.API/DevCom.API.csproj" />
+  <Project Path="DevCom.Application/DevCom.Application.csproj" />
+  <Project Path="DevCom.Domain/DevCom.Domain.csproj" />
+  <Project Path="DevCom.Infrastructure/DevCom.Infrastructure.csproj" />
+</Solution>

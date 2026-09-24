@@ -1,0 +1,15 @@
+C:\Users\Lucas\OneDrive\Documentos\development\Dev.com\Dev.com\Backend\test_endpoints\bin\Debug\net8.0\test_endpoints.exe
+C:\Users\Lucas\OneDrive\Documentos\development\Dev.com\Dev.com\Backend\test_endpoints\bin\Debug\net8.0\test_endpoints.deps.json
+C:\Users\Lucas\OneDrive\Documentos\development\Dev.com\Dev.com\Backend\test_endpoints\bin\Debug\net8.0\test_endpoints.runtimeconfig.json
+C:\Users\Lucas\OneDrive\Documentos\development\Dev.com\Dev.com\Backend\test_endpoints\bin\Debug\net8.0\test_endpoints.dll
+C:\Users\Lucas\OneDrive\Documentos\development\Dev.com\Dev.com\Backend\test_endpoints\bin\Debug\net8.0\test_endpoints.pdb
+C:\Users\Lucas\OneDrive\Documentos\development\Dev.com\Dev.com\Backend\test_endpoints\obj\Debug\net8.0\test_endpoints.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Lucas\OneDrive\Documentos\development\Dev.com\Dev.com\Backend\test_endpoints\obj\Debug\net8.0\test_endpoints.AssemblyInfoInputs.cache
+C:\Users\Lucas\OneDrive\Documentos\development\Dev.com\Dev.com\Backend\test_endpoints\obj\Debug\net8.0\test_endpoints.AssemblyInfo.cs
+C:\Users\Lucas\OneDrive\Documentos\development\Dev.com\Dev.com\Backend\test_endpoints\obj\Debug\net8.0\test_endpoints.csproj.CoreCompileInputs.cache
+C:\Users\Lucas\OneDrive\Documentos\development\Dev.com\Dev.com\Backend\test_endpoints\obj\Debug\net8.0\test_endpoints.sourcelink.json
+C:\Users\Lucas\OneDrive\Documentos\development\Dev.com\Dev.com\Backend\test_endpoints\obj\Debug\net8.0\test_endpoints.dll
+C:\Users\Lucas\OneDrive\Documentos\development\Dev.com\Dev.com\Backend\test_endpoints\obj\Debug\net8.0\refint\test_endpoints.dll
+C:\Users\Lucas\OneDrive\Documentos\development\Dev.com\Dev.com\Backend\test_endpoints\obj\Debug\net8.0\test_endpoints.pdb
+C:\Users\Lucas\OneDrive\Documentos\development\Dev.com\Dev.com\Backend\test_endpoints\obj\Debug\net8.0\test_endpoints.genruntimeconfig.cache
+C:\Users\Lucas\OneDrive\Documentos\development\Dev.com\Dev.com\Backend\test_endpoints\obj\Debug\net8.0\ref\test_endpoints.dll

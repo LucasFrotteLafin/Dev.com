@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dev.com — Dashboard</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .page-title    { padding: 32px 32px 0; font-size: 1.5rem; font-weight: bold; }
+    .page-subtitle { padding: 6px 32px 24px; color: #777; font-size: .9rem; }
+    .stats-row { display: flex; gap: 16px; padding: 0 32px; flex-wrap: wrap; }
+    .stat-card { background: white; border: 1px solid #ddd; border-radius: 8px; padding: 20px 28px; text-align: center; flex: 1; min-width: 140px; }
+    .stat-card strong { display: block; font-size: 1.8rem; color: #6c63ff; }
+    .stat-card span   { font-size: .82rem; color: #777; }
+    .section   { padding: 32px; }
+    .section h2 { font-size: 1.1rem; font-weight: bold; margin-bottom: 16px; color: #333; }
+    .project-row { background: white; border: 1px solid #ddd; border-radius: 8px; padding: 18px 20px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+    .project-row:hover { border-color: #6c63ff; }
+    .project-row h4   { font-size: .95rem; margin-bottom: 4px; }
+    .project-row span { font-size: .82rem; color: #777; }
+    .project-row-right { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+    .tabs { display: flex; gap: 8px; padding: 24px 32px 0; border-bottom: 1px solid #ddd; flex-wrap: wrap; }
+    .tab-btn { padding: 10px 20px; border: none; background: none; cursor: pointer; font-size: .9rem; color: #777; border-bottom: 2px solid transparent; margin-bottom: -1px; }
+    .tab-btn.active { color: #6c63ff; border-bottom: 2px solid #6c63ff; font-weight: bold; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    .tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+    .profile-header { background: #6c63ff; padding: 48px 32px 32px; color: white; display: flex; align-items: center; gap: 24px; }
+    .profile-avatar { width: 80px; height: 80px; background: white; color: #6c63ff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.6rem; font-weight: bold; flex-shrink: 0; }
+    .profile-header h2 { font-size: 1.4rem; margin-bottom: 4px; }
+    .profile-header p  { opacity: .85; font-size: .9rem; margin-bottom: 8px; }
+    .profile-section { padding: 28px 32px; border-bottom: 1px solid #ddd; background: white; margin-bottom: 12px; }
+    .profile-section h3 { font-size: 1rem; font-weight: bold; margin-bottom: 14px; color: #333; }
+    .create-form { background: white; border: 1px solid #ddd; border-radius: 8px; padding: 28px; max-width: 680px; }
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; font-size: .82rem; font-weight: bold; margin-bottom: 6px; color: #555; }
+    .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: .9rem; outline: none; font-family: inherit; box-sizing: border-box; }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: #6c63ff; }
+    .form-group textarea { resize: vertical; min-height: 90px; }
+    .form-row { display: flex; gap: 16px; }
+    .form-row .form-group { flex: 1; }
+    .success-msg { color: #2e7d52; font-size: .85rem; margin-top: 12px; }
+    .error-msg   { color: #c0392b; font-size: .85rem; margin-top: 12px; }
+    .notif-item { background: white; border: 1px solid #ddd; border-radius: 8px; padding: 16px 20px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+    .notif-item.unread { border-left: 3px solid #6c63ff; background: #faf9ff; }
+    .notif-item p    { font-size: .88rem; color: #333; margin-bottom: 4px; }
+    .notif-item span { font-size: .78rem; color: #999; }
+    .notif-badge { background: #6c63ff; color: white; font-size: .72rem; font-weight: bold; padding: 2px 7px; border-radius: 20px; margin-left: 6px; }
+    .empty-state { text-align: center; color: #999; padding: 48px 0; font-size: .9rem; }
+    .proposal-row { background: white; border: 1px solid #ddd; border-radius: 8px; padding: 16px 20px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+    .proposal-row h4 { font-size: .9rem; margin-bottom: 4px; }
+    .proposal-row p  { font-size: .82rem; color: #777; }
+    .badge-pending    { background: #fff4d4; color: #996600; padding: 3px 10px; border-radius: 20px; font-size: .75rem; font-weight: bold; }
+    .badge-accepted-p { background: #d4f4e2; color: #2e7d52; padding: 3px 10px; border-radius: 20px; font-size: .75rem; font-weight: bold; }
+    .badge-rejected   { background: #fee; color: #c0392b; padding: 3px 10px; border-radius: 20px; font-size: .75rem; font-weight: bold; }
+    .dev-name-link { color: #6c63ff; cursor: pointer; text-decoration: underline; background: none; border: none; font-size: .88rem; padding: 0; }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="logo">Dev.com</div>
+    <ul>
+      <li><a href="index.html">Início</a></li>
+      <li><a href="dashboard.html">Dashboard</a></li>
+    </ul>
+    <button class="nav-btn" id="nav-user-btn"></button>
+  </nav>
+
+  <div class="tabs" id="main-tabs"></div>
+
+  <!-- VISÃO GERAL (dev) -->
+  <div class="tab-content" id="tab-visao-geral">
+    <p class="page-title" id="greeting"></p>
+    <p class="page-subtitle">Aqui está um resumo da sua atividade</p>
+    <div class="stats-row" id="stats-row"></div>
+    <div class="section">
+      <h2>Minhas propostas enviadas</h2>
+      <div id="my-proposals-list"></div>
+    </div>
+    <div class="section" style="padding-top:0">
+      <h2>Projetos em aberto para você</h2>
+      <div id="recommended-list"></div>
+    </div>
+  </div>
+
+  <!-- MEUS PROJETOS (cliente) -->
+  <div class="tab-content" id="tab-meus-projetos-cliente">
+    <div class="section">
+      <h2>Meus projetos publicados</h2>
+      <div id="client-projects-list"></div>
+    </div>
+  </div>
+
+  <!-- CRIAR PROJETO (cliente) -->
+  <div class="tab-content" id="tab-criar-projeto">
+    <div class="section">
+      <h2>Publicar novo projeto</h2>
+      <div class="create-form">
+        <form onsubmit="submitProject(event)">
+          <div class="form-group"><label>Título do projeto</label><input type="text" id="proj-title" required /></div>
+          <div class="form-group"><label>Descrição</label><textarea id="proj-desc" required></textarea></div>
+          <div class="form-row">
+            <div class="form-group"><label>Orçamento (R$)</label><input type="number" id="proj-budget" min="1" step="0.01" required /></div>
+            <div class="form-group"><label>Prazo</label><input type="text" id="proj-deadline" placeholder="Ex: 30 dias" required /></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Categoria</label>
+              <select id="proj-category">
+                <option>E-commerce</option><option>Web App</option><option>Landing Page</option>
+                <option>Dashboard</option><option>Sistema</option><option>Integração</option>
+                <option>Mobile</option><option>Outro</option>
+              </select>
+            </div>
+            <div class="form-group"><label>Tecnologias (separadas por vírgula)</label><input type="text" id="proj-tags" /></div>
+          </div>
+          <button class="btn btn-purple" type="submit" id="btn-criar">Publicar projeto</button>
+          <p class="success-msg" id="proj-success" style="display:none">✓ Projeto publicado com sucesso!</p>
+          <p class="error-msg"   id="proj-error"   style="display:none"></p>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- NOTIFICAÇÕES -->
+  <div class="tab-content" id="tab-notificacoes">
+    <div class="section">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+        <h2 style="margin:0">Notificações</h2>
+        <button class="btn btn-outline" style="padding:6px 14px;font-size:.82rem" onclick="markAllRead()">Marcar todas como lidas</button>
+      </div>
+      <div id="notif-list"></div>
+    </div>
+  </div>
+
+  <!-- PERFIL -->
+  <div class="tab-content" id="tab-perfil">
+    <div class="profile-header">
+      <div class="profile-avatar" id="perfil-avatar"></div>
+      <div>
+        <h2 id="perfil-name"></h2>
+        <p id="perfil-role"></p>
+        <span style="font-size:.85rem">membro desde <span id="perfil-since"></span></span>
+      </div>
+    </div>
+    <div class="profile-section">
+      <h3>Dados da conta</h3>
+      <p style="font-size:.88rem;color:#555" id="perfil-email"></p>
+    </div>
+    <div class="profile-section" id="perfil-dev-link" style="display:none">
+      <h3>Meu perfil público</h3>
+      <p style="font-size:.85rem;color:#777;margin-bottom:12px">Este é o perfil que as empresas verão ao clicar no seu nome.</p>
+      <button class="btn btn-outline" id="btn-ver-perfil">Ver meu perfil</button>
+    </div>
+    <div class="profile-section" style="border:none">
+      <button class="btn btn-outline" onclick="logout()">Sair da conta</button>
+    </div>
+  </div>
+
+  <script src="js/main.js"></script>
+  <script>
+    // Guard de autenticação
+    const user = Session.getUser();
+    if (!user || !Session.getToken()) { window.location.href = "auth.html"; }
+
+    const isClient = user.role === "Client";
+
+    document.getElementById("nav-user-btn").textContent = user.name.split(" ")[0];
+    document.getElementById("nav-user-btn").onclick = () => showTab("perfil");
+
+    function logout() { Session.clear(); window.location.href = "index.html"; }
+
+    // ── Abas ──────────────────────────────────────────────────────────
+    const tabs = isClient
+      ? [
+          { id: "meus-projetos-cliente", label: "Meus projetos" },
+          { id: "criar-projeto",         label: "Criar projeto" },
+          { id: "notificacoes",          label: "Notificações" },
+          { id: "perfil",                label: "Perfil" },
+        ]
+      : [
+          { id: "visao-geral",  label: "Visão geral" },
+          { id: "notificacoes", label: "Notificações" },
+          { id: "perfil",       label: "Perfil" },
+        ];
+
+    const tabsEl = document.getElementById("main-tabs");
+    tabs.forEach((t, i) => {
+      const btn = document.createElement("button");
+      btn.className = "tab-btn" + (i === 0 ? " active" : "");
+      btn.id = "tabBtn-" + t.id;
+      btn.onclick = () => showTab(t.id);
+      btn.textContent = t.label;
+      tabsEl.appendChild(btn);
+    });
+
+    function showTab(id) {
+      document.querySelectorAll(".tab-content").forEach(el => el.classList.remove("active"));
+      document.querySelectorAll(".tab-btn").forEach(el => el.classList.remove("active"));
+      const content = document.getElementById("tab-" + id);
+      if (content) content.classList.add("active");
+      const btn = document.getElementById("tabBtn-" + id);
+      if (btn) btn.classList.add("active");
+      if (id === "notificacoes")          renderNotifications();
+      if (id === "meus-projetos-cliente") renderClientProjects();
+      if (id === "visao-geral")           renderDevDashboard();
+    }
+
+    // Carrega badge de notificações
+    (async () => {
+      try {
+        const { count } = await api("/api/notifications/unread-count", { auth: true });
+        updateNotifBadge(count);
+      } catch {}
+    })();
+
+    showTab(tabs[0].id);
+
+    // ── DEV ───────────────────────────────────────────────────────────
+    async function renderDevDashboard() {
+      document.getElementById("greeting").textContent = "Olá, " + user.name.split(" ")[0] + "! 👋";
+      try {
+        const [proposalsRes, openRes, notifRes] = await Promise.all([
+          api("/api/proposals/my",                { auth: true }),
+          api("/api/projects?status=Open&pageSize=3"),
+          api("/api/notifications/unread-count",  { auth: true }),
+        ]);
+
+        const accepted = proposalsRes.filter(p => p.status === "Accepted").length;
+        const pending  = proposalsRes.filter(p => p.status === "Pending").length;
+
+        document.getElementById("stats-row").innerHTML = `
+          <div class="stat-card"><strong>${proposalsRes.length}</strong><span>Propostas enviadas</span></div>
+          <div class="stat-card"><strong>${pending}</strong><span>Aguardando resposta</span></div>
+          <div class="stat-card"><strong>${accepted}</strong><span>Propostas aceitas</span></div>
+          <div class="stat-card"><strong>${notifRes.count}</strong><span>Notificações</span></div>`;
+
+        document.getElementById("my-proposals-list").innerHTML = proposalsRes.length
+          ? proposalsRes.map(p => {
+              const cls   = p.status === "Accepted" ? "badge-accepted-p" : p.status === "Rejected" ? "badge-rejected" : "badge-pending";
+              const label = p.status === "Accepted" ? "✓ Aceita" : p.status === "Rejected" ? "Recusada" : "Aguardando";
+              return `
+                <div class="proposal-row" onclick="goTo('projeto-detalhes.html', ${p.projectId})" style="cursor:pointer">
+                  <div><h4>${p.projectTitle}</h4><p>${p.value} · ${p.deadline}</p></div>
+                  <span class="${cls}">${label}</span>
+                </div>`;
+            }).join("")
+          : `<p class="empty-state">Você ainda não enviou nenhuma proposta. <a href="projetos.html" style="color:#6c63ff">Ver projetos</a></p>`;
+
+        document.getElementById("recommended-list").innerHTML = (openRes.items ?? []).length
+          ? openRes.items.map(p => `
+              <div class="project-row" onclick="goTo('projeto-detalhes.html', ${p.id})">
+                <div>
+                  <h4>${p.title}</h4>
+                  <div class="tags">${(p.tags ?? []).slice(0,3).map(t => `<span class="tag">${t}</span>`).join("")}</div>
+                </div>
+                <span style="font-weight:bold;color:#2e7d52">${formatBudget(p.budget)}</span>
+              </div>`).join("")
+          : `<p class="empty-state">Nenhum projeto em aberto no momento.</p>`;
+      } catch {
+        document.getElementById("stats-row").innerHTML = `<p class="empty-state">Erro ao carregar dados.</p>`;
+      }
+    }
+
+    // ── CLIENT ────────────────────────────────────────────────────────
+    async function renderClientProjects() {
+      const el = document.getElementById("client-projects-list");
+      try {
+        const list = await api("/api/projects/my", { auth: true });
+
+        const totalProposals = list.reduce((a, p) => a + p.proposalCount, 0);
+        const inProgress     = list.filter(p => p.status === "InProgress").length;
+        const open           = list.filter(p => p.status === "Open").length;
+
+        const statsHtml = `
+          <div style="display:flex;gap:16px;flex-wrap:wrap;margin-bottom:24px">
+            <div class="stat-card"><strong>${list.length}</strong><span>Projetos publicados</span></div>
+            <div class="stat-card"><strong>${open}</strong><span>Em aberto</span></div>
+            <div class="stat-card"><strong>${inProgress}</strong><span>Em andamento</span></div>
+            <div class="stat-card"><strong>${totalProposals}</strong><span>Propostas recebidas</span></div>
+          </div>`;
+
+        if (!list.length) {
+          el.innerHTML = statsHtml + `<p class="empty-state">Você ainda não publicou nenhum projeto. <button class="btn btn-purple" style="margin-left:12px" onclick="showTab('criar-projeto')">Criar projeto</button></p>`;
+          return;
+        }
+
+        el.innerHTML = statsHtml + list.map(p => `
+          <div class="project-row" onclick="goTo('projeto-detalhes.html', ${p.id})">
+            <div>
+              <h4>${p.title}</h4>
+              <span>${formatBudget(p.budget)} · ${p.deadline}</span>
+              ${p.acceptedDevName ? `<span style="display:block;margin-top:4px;color:#2e7d52;font-size:.8rem">✓ Dev: <button class="dev-name-link" onclick="event.stopPropagation();goTo('dev-perfil.html?dev=${encodeURIComponent(p.acceptedDevName)}')">${p.acceptedDevName}</button></span>` : ""}
+            </div>
+            <div class="project-row-right">
+              <span class="badge ${getStatusBadge(p.status)}">${getStatusLabel(p.status)}</span>
+              <span style="font-size:.78rem;color:#999">${p.proposalCount} proposta(s)</span>
+            </div>
+          </div>`).join("");
+      } catch {
+        el.innerHTML = `<p class="empty-state">Erro ao carregar projetos.</p>`;
+      }
+    }
+
+    async function submitProject(e) {
+      e.preventDefault();
+      const btn = document.getElementById("btn-criar");
+      btn.disabled = true; btn.textContent = "Publicando...";
+      document.getElementById("proj-success").style.display = "none";
+      document.getElementById("proj-error").style.display   = "none";
+      try {
+        const tagsRaw = document.getElementById("proj-tags").value;
+        await api("/api/projects", {
+          method: "POST", auth: true,
+          body: {
+            title:       document.getElementById("proj-title").value,
+            description: document.getElementById("proj-desc").value,
+            budget:      parseFloat(document.getElementById("proj-budget").value),
+            deadline:    document.getElementById("proj-deadline").value,
+            category:    document.getElementById("proj-category").value,
+            tags:        tagsRaw ? tagsRaw.split(",").map(t => t.trim()).filter(Boolean) : [],
+          },
+        });
+        e.target.reset();
+        document.getElementById("proj-success").style.display = "block";
+        setTimeout(() => document.getElementById("proj-success").style.display = "none", 3000);
+        // Atualiza badge de notificações
+        const { count } = await api("/api/notifications/unread-count", { auth: true });
+        updateNotifBadge(count);
+      } catch (err) {
+        const errEl = document.getElementById("proj-error");
+        errEl.textContent = err.message; errEl.style.display = "block";
+      } finally {
+        btn.disabled = false; btn.textContent = "Publicar projeto";
+      }
+    }
+
+    // ── NOTIFICAÇÕES ──────────────────────────────────────────────────
+    async function renderNotifications() {
+      const el = document.getElementById("notif-list");
+      try {
+        const list = await api("/api/notifications", { auth: true });
+        updateNotifBadge(list.filter(n => !n.isRead).length);
+        if (!list.length) {
+          el.innerHTML = `<p class="empty-state">Nenhuma notificação ainda.</p>`; return;
+        }
+        el.innerHTML = list.map(n => `
+          <div class="notif-item ${n.isRead ? "" : "unread"}">
+            <div><p>${n.message}</p><span>${formatDate(n.createdAt)}</span></div>
+            ${n.projectId ? `<button class="btn btn-outline" style="padding:5px 12px;font-size:.78rem;white-space:nowrap" onclick="goTo('projeto-detalhes.html', ${n.projectId})">Ver projeto</button>` : ""}
+          </div>`).join("");
+      } catch {
+        el.innerHTML = `<p class="empty-state">Erro ao carregar notificações.</p>`;
+      }
+    }
+
+    async function markAllRead() {
+      await api("/api/notifications/read-all", { method: "PATCH", auth: true });
+      renderNotifications();
+    }
+
+    function updateNotifBadge(count) {
+      const btn = document.getElementById("tabBtn-notificacoes");
+      if (!btn) return;
+      btn.innerHTML = "Notificações" + (count > 0 ? `<span class="notif-badge">${count}</span>` : "");
+    }
+
+    // ── PERFIL ────────────────────────────────────────────────────────
+    const initials = user.name.split(" ").map(w => w[0]).slice(0,2).join("").toUpperCase();
+    document.getElementById("perfil-avatar").textContent = initials;
+    document.getElementById("perfil-name").textContent   = user.name;
+    document.getElementById("perfil-role").textContent   = isClient ? "Empresa / Cliente" : "Desenvolvedor";
+    document.getElementById("perfil-email").textContent  = "E-mail: " + user.email;
+    document.getElementById("perfil-since").textContent  = formatDate(user.createdAt);
+
+    if (!isClient) {
+      const devLink = document.getElementById("perfil-dev-link");
+      devLink.style.display = "block";
+      document.getElementById("btn-ver-perfil").onclick = () =>
+        window.location.href = "dev-perfil.html?dev=" + encodeURIComponent(user.email);
+    }
+  </script>
+</body>
+</html>
